@@ -6,11 +6,12 @@ using UnityEngine.UI;
 public enum ItemType
 {
     Default,
-    Tree,
     Plant,
     Weapon,
     Food,
-    Armor
+    Armor,
+    Heal,
+    Helment
 }
 
 public class ItemScriptableObject : ScriptableObject
