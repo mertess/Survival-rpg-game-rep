@@ -5,14 +5,14 @@ using System;
 
 public class InventoryManager : MonoBehaviour
 {
-    public GameObject UIPanel;
+    public GameObject UIBG;
     public Transform inventoryPanel;
     public List<InventorySlot> slots = new List<InventorySlot>();
     public bool isOpened; 
 
     public void Awake()
     {
-        UIPanel.SetActive(true);
+        UIBG.SetActive(true);
     }
     // Start is called before the first frame update
     void Start()
@@ -24,7 +24,8 @@ public class InventoryManager : MonoBehaviour
                 slots.Add(inventoryPanel.GetChild(i).GetComponent<InventorySlot>());
             }
         }
-        UIPanel.SetActive(false);
+        UIBG.SetActive(false);
+        inventoryPanel.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -32,17 +33,24 @@ public class InventoryManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.I))
         {
-            isOpened = !isOpened;
-            if (isOpened)
-            {
-                UIPanel.SetActive(true);
-            }
-            else
-            {
-                UIPanel.SetActive(false);
-            }
+            OpenInventory();
         } 
 
+    }
+
+    public void OpenInventory()
+    {
+        isOpened = !isOpened;
+        if (isOpened)
+        {
+            UIBG.SetActive(true);
+            inventoryPanel.gameObject.SetActive(true);
+        }
+        else
+        {
+            inventoryPanel.gameObject.SetActive(false);
+            UIBG.SetActive(false);
+        }
     }
 
     public void AddItem(ItemScriptableObject _item, int _amount)

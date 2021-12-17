@@ -23,15 +23,20 @@ public class SettingsManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.U))
         {
-            isOpened = !isOpened;
-            if (isOpened)
-            {
-                UIPanel.SetActive(true);
-            }
-            else
-            {
-                UIPanel.SetActive(false);
-            }
+            OpenSettings();
+        }
+    }
+
+    public void OpenSettings()
+    {
+        isOpened = !isOpened;
+        if (isOpened)
+        {
+            UIPanel.SetActive(true);
+        }
+        else
+        {
+            UIPanel.SetActive(false);
         }
     }
 
