@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
+using System;
 /// IPointerDownHandler - Следит за нажатиями мышки по объекту на котором висит этот скрипт
 /// IPointerUpHandler - Следит за отпусканием мышки по объекту на котором висит этот скрипт
 /// IDragHandler - Следит за тем не водим ли мы нажатую мышку по объекту
@@ -23,18 +24,14 @@ public class DragAndDropItem : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     {
         // Если слот пустой, то мы не выполняем то что ниже return;
         if (oldSlot.isEmpty)
-        {
             return;
-        }
         GetComponent<RectTransform>().position += new Vector3(eventData.delta.x, eventData.delta.y);
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
         if (oldSlot.isEmpty)
-        {
             return;
-        }
         //Делаем картинку прозрачнее
         GetComponentInChildren<Image>().color = new Color(1, 1, 1, 0.75f);
         // Делаем так чтобы нажатия мышкой не игнорировали эту картинку
@@ -46,9 +43,7 @@ public class DragAndDropItem : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     public void OnPointerUp(PointerEventData eventData)
     {
         if (oldSlot.isEmpty)
-        {
             return;
-        }
         // Делаем картинку опять не прозрачной
         GetComponentInChildren<Image>().color = new Color(1, 1, 1, 1f);
         // И чтобы мышка опять могла ее засечь
@@ -58,7 +53,7 @@ public class DragAndDropItem : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         transform.SetParent(oldSlot.transform);
         transform.position = oldSlot.transform.position;
         //Если мышка отпущена над объектом по имени UIPanel, то...
-        if (eventData.pointerCurrentRaycast.gameObject.name == "UIPanel")
+        if (eventData.pointerCurrentRaycast.gameObject.name == "UIBG") // renamed to UIBG
         {
             // Выброс объектов из инвентаря - Спавним префаб обекта перед персонажем
             GameObject itemObject = Instantiate(oldSlot.item.itemPrefab, player.position + Vector3.up + player.forward, Quaternion.identity);
@@ -67,6 +62,10 @@ public class DragAndDropItem : MonoBehaviour, IPointerDownHandler, IPointerUpHan
             itemObject.GetComponent<ThisItem>().amount = oldSlot.amount;
             // убираем значения InventorySlot
             NullifySlotData();
+        }
+        else if (eventData.pointerCurrentRaycast.gameObject.transform.parent.parent == null)
+        {
+            return;
         }
         else if (eventData.pointerCurrentRaycast.gameObject.transform.parent.parent.GetComponent<InventorySlot>() != null)
         {
