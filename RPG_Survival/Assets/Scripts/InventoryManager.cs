@@ -7,8 +7,14 @@ public class InventoryManager : MonoBehaviour
 {
     public GameObject UIBG;
     public Transform inventoryPanel;
+    public Transform quickPanel;
+    public List<InventorySlot> quickSlots = new List<InventorySlot>();
     public List<InventorySlot> slots = new List<InventorySlot>();
-    public bool isOpened; 
+    public bool isOpened;
+
+    private bool isArmor;
+    private bool isHelmet;
+    private bool isWeapon;
 
     public void Awake()
     {
@@ -24,6 +30,13 @@ public class InventoryManager : MonoBehaviour
                 slots.Add(inventoryPanel.GetChild(i).GetComponent<InventorySlot>());
             }
         }
+        for (int i = 0; i < quickPanel.childCount; i++)
+        {
+            if (quickPanel.GetChild(i).GetComponent<InventorySlot>() != null)
+            {
+                quickSlots.Add(quickPanel.GetChild(i).GetComponent<InventorySlot>());
+            }
+        }
         UIBG.SetActive(false);
         inventoryPanel.gameObject.SetActive(false);
     }
@@ -34,8 +47,40 @@ public class InventoryManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.I))
         {
             OpenInventory();
-        } 
+        }
+        ChangeItem();
+    }
 
+    public void ChangeItem()
+    {
+        // если я все правильно понимаю как делать надо
+        if (quickSlots[0] != null && !isArmor)
+        {
+            isArmor = true;
+            // какая-то переменная для уменьшения уровня дмага по челу *= ((100 - quickSlots[0].item.armor) / 100);
+        }
+        else
+        {
+            isArmor = false;
+        }
+        if (quickSlots[1] != null &&  !isHelmet)
+        {
+            isHelmet = true;
+            // какая-то переменная для уменьшения уровня дмага по челу *= ((100 - quickSlots[1].item.armor) / 100);
+        }
+        else
+        {
+            isHelmet = false;
+        }
+        if (quickSlots[2] != null && !isWeapon)
+        {
+            isWeapon = true;
+            // переменная для увеличения дамага по деревьям *= ((100 - quickSlots[2].item.Damage) / 100);
+        }
+        else
+        {
+            isWeapon = false;
+        }
     }
 
     public void OpenInventory()
@@ -82,6 +127,14 @@ public class InventoryManager : MonoBehaviour
                 slot.itemAmountText.text = _amount.ToString();
                 break;
             }
+        }
+    }
+
+    public void UseItemHeel()
+    {
+        if (quickSlots[3] != null)
+        {
+            // переменная для увеличения жизни += quickSlots[3].item.healAmounth;
         }
     }
 }
